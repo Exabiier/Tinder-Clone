@@ -25,13 +25,13 @@
     "react-native-safe-area-context": "4.4.1",
     "react-native-screens": "~3.18.0",
     "react-native-web": "~0.18.9",
-    "react-test-renderer": "^18.1.0",
     "tailwind-rn": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/preset-typescript": "^7.21.0",
     "@swc/jest": "^0.2.24",
+    "@testing-library/jest-native": "^5.4.2",
     "@testing-library/react-native": "^12.0.0-rc.0",
     "@types/jest": "^29.4.0",
     "@types/react": "~18.0.14",

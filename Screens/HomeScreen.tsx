@@ -9,7 +9,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView>
       <Text>HomeScreen</Text>
-      <Button title='Go to Chat Screen' testID='ChatScreen' onPress={()=> navigation.navigate("Chat")} />
+      <Button title='Go to Chat Screen' testID='ChatScreenButton' onPress={()=> navigation.navigate("Chat")} />
     </SafeAreaView>
   )
 }

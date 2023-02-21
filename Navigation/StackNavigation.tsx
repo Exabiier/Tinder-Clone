@@ -2,9 +2,9 @@ import { View, Text } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../Screens/HomeScreen'
 import ChatScreen from '../Screens/ChatScreen'
+import { RootStackParamList } from '../typings'
 
-
-const Stack = createNativeStackNavigator<RootStack>()
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const StackNavigation = () => {
   return (

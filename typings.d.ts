@@ -1,8 +1,8 @@
 import { NavigationProp } from "@react-navigation/native"
 
-type RootStack = {
+type RootStackParamList = {
     Home: undefined
     Chat: undefined
 }
 
-type ChatScreenNavigationProp = NavigationProp<RootStack, "Chat">
+type ChatScreenNavigationProp = NavigationProp<RootStackParamList, "Chat">

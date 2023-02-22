@@ -1,13 +1,21 @@
 import { Text, View } from 'react-native';
 import StackNavigation from './Navigation/StackNavigation';
 import { NavigationContainer } from '@react-navigation/native';
+import { AuthProvider } from './Hooks/useAuth';
 
-
+// TODO refractor the react contex with react redux and tool kit
+// TODO need to create type for the createContext()
+// 
+// 
 
 export default function App() {
   return (
     <NavigationContainer>
-      <StackNavigation />
+      {/* HOC - Higher Order Component */}
+      <AuthProvider>
+        <StackNavigation />
+      </AuthProvider>
+      
     </NavigationContainer>
       
   );

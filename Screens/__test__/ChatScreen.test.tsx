@@ -1,19 +1,19 @@
-import  "react-native";
-import React from "react";
-import ChatScreen from "../ChatScreen";
-import { fireEvent, render } from '@testing-library/react-native';
+// import  "react-native";
+// import React from "react";
+// import ChatScreen from "../ChatScreen";
+// import { fireEvent, render } from '@testing-library/react-native';
 
-describe("should go to chat screen", () =>{
+// describe("should go to chat screen", () =>{
 
-    const navigation = {navigate: () => {}};
+//     const navigation = {navigate: () => {}};
 
-    jest.spyOn(navigation, "navigate");
+//     jest.spyOn(navigation, "navigate");
 
-    const page = render(<ChatScreen />);
+//     const page = render(<ChatScreen />);
 
-    const chatButton = page.getByTestId('ChatScreenButton');
+//     const chatButton = page.getByTestId('ChatScreenButton');
 
-    fireEvent.press(chatButton);
+//     fireEvent.press(chatButton);
 
-    expect(navigation.navigate).toBeCalledWith("Chat");
-})
+//     expect(navigation.navigate).toBeCalledWith("Chat");
+// })

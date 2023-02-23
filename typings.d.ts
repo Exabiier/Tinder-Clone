@@ -14,8 +14,27 @@ type AuthProviderProp = {
 
 // intfaces for Project
 interface GoogleConfig {
+    expoClientId: string,
     iosClientId: string,
     androidClientId: string,
     scopes: string[],
-    Permissions: string[],
+    permissions: string[],
+}
+
+interface FirebaseConfig {
+    apiKey1: string,
+    authDomain1: sting,
+    projectId1: string,
+    storageBucket1: string,
+    messagingSenderId1: string,
+    appId1: string,
+}
+
+interface FirebaseConfigure {
+    apiKey: string,
+    authDomain: sting,
+    projectId: string,
+    storageBucket: string,
+    messagingSenderId: string,
+    appId: string,
 }

@@ -19,3 +19,4 @@ GoogleService-Info.plist
 google-services.json
 
 keys.ts
+firebase.ts

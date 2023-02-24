@@ -82,7 +82,7 @@ export const AuthProvider = ({children}: AuthProviderProp) => {
     
 
     // this is the useGoogleAuthRequest hook for access token:
-    const { promptAsync: promptAsyncAccessToken, response:accessTokenResponse } = useGoogleAuthRequest(config);
+    const { promptAsync: promptAsyncAccessToken, response: accessTokenResponse } = useGoogleAuthRequest(config);
     const { promptAsync: promptAsyncIdToken } = useGoogleAuthRequestID(configID);
 
       const getIdWithGoogle = async () => {
@@ -125,12 +125,12 @@ export const AuthProvider = ({children}: AuthProviderProp) => {
         loading,
         signInWithGoogle,
         user
-      }), [user, loading, error])
+    }), [user, loading, error]);
 
   return (
-    <AuthContext.Provider value={{
+    <AuthContext.Provider value={
        memodValue
-    }}>
+    }>
         {!loadingInitial && children}
     </AuthContext.Provider>
   )

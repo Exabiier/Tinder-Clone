@@ -14,6 +14,7 @@ type AuthProviderProp = {
 
 // intfaces for Project
 interface GoogleConfig {
+    responseType?: string,
     expoClientId: string,
     iosClientId: string,
     androidClientId: string,
@@ -38,3 +39,16 @@ interface FirebaseConfigure {
     messagingSenderId: string,
     appId: string,
 }
+
+type Memoed = {
+  user: firebase.default.User | null;
+  loading: boolean;
+  error: string | null;
+  logOut: () => void;
+  signInWithGoogle: () => Promise<void>;
+}
+
+type AuthContextType = {
+    memodValue: Memoed;
+  }
+  

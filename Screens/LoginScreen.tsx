@@ -4,10 +4,7 @@ import useAuth from '../Hooks/useAuth'
 
 const LoginScreen = () => {
     const { signInWithGoogle, getIdWithGoogle } = useAuth();
-    const bothSignIns = () => {
-      getIdWithGoogle();
-      signInWithGoogle();
-    }
+    
 
   return (
     <View>

@@ -8,7 +8,7 @@ type ChatScreenNavigationProp = NavigationProp<RootStackParamList, "Chat">
 
 // types for Provider:
 type AuthProviderProp = {
-    children: ReacNode;
+    children: ReactNode;
 }
 
 

@@ -11,8 +11,12 @@ type AuthProviderProp = {
     children: ReactNode;
 }
 
-
+///////////////////////
 // intfaces for Project
+///////////////////////
+
+/// Google interFaces ///
+
 interface GoogleConfig {
     responseType?: string,
     expoClientId: string,
@@ -48,7 +52,39 @@ type Memoed = {
   signInWithGoogle: () => Promise<void>;
 }
 
-type AuthContextType = {
-    memodValue: Memoed;
-  }
+/// Home Screen interfaces ///
   
+interface OverLayLabelStyle {
+    left: {
+        title: string,
+        style: {
+          label:{
+            textAlign: "right" | 'left' | 'center',
+            color: string,
+          },
+        }
+      },
+      right: {
+        title: string,
+        style: {
+          label: {
+            color: string
+          }
+        }
+      },
+}
+
+interface SwiperProps<T> {
+    ref?: RefObject<any>;
+    cards?: T[];
+    stackSize?: number;
+    cardIndex?: number;
+    animateCardOpacity?: boolean;
+    verticalSwipe?: boolean;
+    onSwipedLeft?: () => void;
+    onSwipedRight?: () => void;
+    backgroundColor?: string;
+    overlayLabels?: OverlayLabelStyle;
+    containerStyle?: Record<string, string>;
+    renderCard?: (card: T) => ReactNode;
+  }

@@ -14,7 +14,6 @@ import { auth } from '../firebase';
 
 const AuthContext = createContext<any>({});
 
-
 /// Two config due to an error in the expo-auth-seesion libary ///
 
 const config: GoogleConfig = {
@@ -77,7 +76,7 @@ export const AuthProvider = ({children}: AuthProviderProp) => {
       });
       
       return unsub();
-    }, [])
+    }, [user])
 
     
 

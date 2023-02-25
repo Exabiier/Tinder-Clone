@@ -7,6 +7,7 @@ import { AuthProvider } from './Hooks/useAuth';
 // TODO need to create type for the createContext()
 // TODO Review the code for google firbase and understand why it works
 // TODO See if you only can only do one https://github.com/expo/expo/issues/12808
+// TODO We need to to make major type definitions on the home screen on swiper and data from google firebase
 
  
 

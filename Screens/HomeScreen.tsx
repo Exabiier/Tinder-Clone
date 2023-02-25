@@ -34,12 +34,12 @@ const Dummy_Data =[
 }
 ]
   
-// TODO Make types for this page once you know what the dat format for the object will be. also find how to make types for useref
+// TODO Make types for this page once you know what the data format for the object will be. also find how to make types for useref
 
 const HomeScreen = () => {
   const { logOut, user } = useAuth();
   const navigation = useNavigation<ChatScreenNavigationProp>();
-  const swipeRef: any = useRef(null);
+  const swipeRef = useRef<Swiper<DummyData>>(null);
 
   return (
     <SafeAreaView className="flex-1">
@@ -59,8 +59,9 @@ const HomeScreen = () => {
 
       </View>
       {/* End of Header */}
+
       <View className="flex-1  -mt-6">
-        <Swiper
+        <Swiper<DummyData>
           ref={swipeRef}
           cards={Dummy_Data}
           stackSize={5}
@@ -94,7 +95,6 @@ const HomeScreen = () => {
             },
           }}
           containerStyle={{ backgroundColor: "transparent"}}
-          // @ts-ignore Swiper does not have types
           renderCard={(card) =>(
             <View key={card.id} className="relative bg-white-500 h-3/4 rounded-xl">
 
@@ -109,22 +109,18 @@ const HomeScreen = () => {
                 </View>
                 <Text className='text-2xl font-bold'>{card.age}</Text>
               </View>
-
-            </View>
-
-
-            
+            </View>    
           )}
         />     
       </View>
 
       <View className='flex-row justify-evenly'>
 
-        <TouchableOpacity className="items-center justify-center rounded-full w-16 h-16 bg-red-200" onPress={() => swipeRef.current.swipeLeft()}>
+        <TouchableOpacity className="items-center justify-center rounded-full w-16 h-16 bg-red-200" onPress={() => swipeRef.current?.swipeLeft()}>
           <Entypo name="cross" size={24} color="red"/>
         </TouchableOpacity>
 
-        <TouchableOpacity  className="items-center justify-center rounded-full w-16 h-16 bg-green-200" onPress={() => swipeRef.current.swipeRight()}>
+        <TouchableOpacity  className="items-center justify-center rounded-full w-16 h-16 bg-green-200" onPress={() => swipeRef.current?.swipeRight()}>
           <AntDesign name="heart" size={24} color="green"/>
         </TouchableOpacity>
 

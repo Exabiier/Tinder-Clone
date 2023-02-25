@@ -11,6 +11,16 @@ type AuthProviderProp = {
     children: ReactNode;
 }
 
+/// Dummy Data for Home Screen ///
+type DummyData = {
+    firstName: string,
+  lastName: string,
+  job: string,
+  photoURL: string,
+  age: number,
+  id: number
+}
+
 ///////////////////////
 // intfaces for Project
 ///////////////////////
@@ -54,37 +64,5 @@ type Memoed = {
 
 /// Home Screen interfaces ///
   
-interface OverLayLabelStyle {
-    left: {
-        title: string,
-        style: {
-          label:{
-            textAlign: "right" | 'left' | 'center',
-            color: string,
-          },
-        }
-      },
-      right: {
-        title: string,
-        style: {
-          label: {
-            color: string
-          }
-        }
-      },
-}
 
-interface SwiperProps<T> {
-    ref?: RefObject<any>;
-    cards?: T[];
-    stackSize?: number;
-    cardIndex?: number;
-    animateCardOpacity?: boolean;
-    verticalSwipe?: boolean;
-    onSwipedLeft?: () => void;
-    onSwipedRight?: () => void;
-    backgroundColor?: string;
-    overlayLabels?: OverlayLabelStyle;
-    containerStyle?: Record<string, string>;
-    renderCard?: (card: T) => ReactNode;
-  }
+  

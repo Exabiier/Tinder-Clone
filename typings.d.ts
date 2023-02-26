@@ -1,10 +1,15 @@
 type RootStackParamList = {
-    Home: undefined
-    Chat: undefined
-    Login: undifined
+    Home: undefined,
+    Chat: undefined,
+    Login: undifined,
+    ModalScreen: undifined,
 }
 
 type ChatScreenNavigationProp = NavigationProp<RootStackParamList, "Chat">
+
+type HomeScreenNavigationProp = NavigationProp<RootStackParamList, "Home">
+
+type ModalScreenNavigationProp = NavigationProp<RootStackParamList, "ModalScreen">
 
 // types for Provider:
 type AuthProviderProp = {
@@ -14,11 +19,30 @@ type AuthProviderProp = {
 /// Dummy Data for Home Screen ///
 type DummyData = {
     firstName: string,
-  lastName: string,
-  job: string,
-  photoURL: string,
-  age: number,
-  id: number
+    lastName: string,
+    job: string,
+    photoURL: string,
+    age: number,
+    id: number,
+}
+
+/// user data from the ModalScreen.tsx ///
+
+ type UserData = {
+    image: string,
+    job: string,
+    age: string,
+    gender: string,
+}
+
+type SetDocData = {
+    id: string,
+    displayName: string,
+    photoURL: string,
+    job: string,
+    age: string,
+    gender: string,
+    timestamp: FieldValue,
 }
 
 ///////////////////////

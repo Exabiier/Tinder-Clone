@@ -1,10 +1,12 @@
 import { View, Text, Button, TouchableOpacity, Image, StyleSheet } from 'react-native'
-import React, { useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import {AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import useAuth from '../Hooks/useAuth'
 import Swiper from 'react-native-deck-swiper'
+import { doc, onSnapshot } from 'firebase/firestore'
+import { db } from '../firebase'
 
 
 const Dummy_Data =[
@@ -33,13 +35,25 @@ const Dummy_Data =[
   id:789
 }
 ]
-  
-// TODO Make types for this page once you know what the data format for the object will be. also find how to make types for useref
+
 
 const HomeScreen = () => {
-  const { logOut, user } = useAuth();
-  const navigation = useNavigation<ChatScreenNavigationProp>();
+  const { logOut, user, loading} = useAuth();
+  const navigation = useNavigation<ChatScreenNavigationProp | ModalScreenNavigationProp>();
   const swipeRef = useRef<Swiper<DummyData>>(null);
+  const [ profile, setProfile ] = useState<any>([]);
+
+  console.log(user)
+ useEffect(()=>{
+    if(user.uid){
+    const unsub = onSnapshot(doc(db, 'users', user.uid), snapshot => {
+    console.log(snapshot)
+    if(!snapshot.exists()){
+     navigation.navigate("ModalScreen");
+    }
+    });
+    return () => {unsub()};}
+ },[user, loading])
 
   return (
     <SafeAreaView className="flex-1">
@@ -49,7 +63,8 @@ const HomeScreen = () => {
           <Image className='w-10 h-10 rounded-full'  source={{ uri: `${user? user.photoURL: ""}`}} />
         </TouchableOpacity>
 
-        <TouchableOpacity>
+{/* TODO change the on press after I'm editing it */}
+        <TouchableOpacity onPress={()=> navigation.navigate("ModalScreen")}>
         <Image className="h-16 w-16" source={require('../images/kisspng-tinder.png')} />
         </TouchableOpacity>
 
@@ -63,7 +78,7 @@ const HomeScreen = () => {
       <View className="flex-1  -mt-6">
         <Swiper<DummyData>
           ref={swipeRef}
-          cards={Dummy_Data}
+          cards={profile}
           stackSize={5}
           cardIndex={0}
           animateCardOpacity
@@ -95,7 +110,7 @@ const HomeScreen = () => {
             },
           }}
           containerStyle={{ backgroundColor: "transparent"}}
-          renderCard={(card) =>(
+          renderCard={(card) => card ?(
             <View key={card.id} className="relative bg-white-500 h-3/4 rounded-xl">
 
               <Image className="w-full h-full rounded-xl" source={{ uri: card.photoURL}}/>
@@ -110,6 +125,21 @@ const HomeScreen = () => {
                 <Text className='text-2xl font-bold'>{card.age}</Text>
               </View>
             </View>    
+          ) : (
+            <View
+            className="relative bg-white h-3/4 rounded=xl justify-center items-center"
+            style={styles.cardShadow}
+            >
+              <Text className="font-bold pb-5">No More Profiles</Text>
+              <View className='object-cover w-40 h-40'>
+                <Image
+                  className="h-full w-full"
+                
+                  source={{ uri: "https://links.papareact.com/6gb"}} />  
+                </View>  
+               
+              
+            </View>
           )}
         />     
       </View>

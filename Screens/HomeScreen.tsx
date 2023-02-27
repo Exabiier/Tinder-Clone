@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import {AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import useAuth from '../Hooks/useAuth'
 import Swiper from 'react-native-deck-swiper'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { collection, doc, getDocs, onSnapshot } from 'firebase/firestore'
 import { db } from '../firebase'
 
 
@@ -41,7 +41,7 @@ const HomeScreen = () => {
   const { logOut, user, loading} = useAuth();
   const navigation = useNavigation<ChatScreenNavigationProp | ModalScreenNavigationProp>();
   const swipeRef = useRef<Swiper<DummyData>>(null);
-  const [ profile, setProfile ] = useState<any>([]);
+  const [ profiles, setProfiles ] = useState<any>([]);
 
   console.log(user)
  useEffect(()=>{
@@ -54,6 +54,32 @@ const HomeScreen = () => {
     });
     return () => {unsub()};}
  },[user, loading])
+
+ useEffect(()=>{
+  let unsub;
+
+  const fetchCards: any = async () => {
+
+    const snapshot = await getDocs(collection(db, 'users'));
+    const initialProfiles = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+  setProfiles(initialProfiles);
+  
+  unsub = onSnapshot(collection(db, 'users'), (snapshot: any) => {
+    setProfiles(snapshot.docs.map( (doc: any) => ({
+      id: doc.id,
+      ...doc.data(),
+    })));
+  })}
+
+  fetchCards();
+  return unsub;
+
+ },[])
+
+ console.log(profiles)
 
   return (
     <SafeAreaView className="flex-1">
@@ -78,7 +104,7 @@ const HomeScreen = () => {
       <View className="flex-1  -mt-6">
         <Swiper<DummyData>
           ref={swipeRef}
-          cards={profile}
+          cards={profiles}
           stackSize={5}
           cardIndex={0}
           animateCardOpacity

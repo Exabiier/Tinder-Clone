@@ -46,7 +46,7 @@ const HomeScreen = () => {
   console.log(user)
  useEffect(()=>{
     if(user.uid){
-    const unsub = onSnapshot(doc(db, 'users', user.uid), snapshot => {
+    const unsub = onSnapshot(doc(db, 'user', user.uid), snapshot => {
     console.log(snapshot)
     if(!snapshot.exists()){
      navigation.navigate("ModalScreen");
@@ -55,19 +55,20 @@ const HomeScreen = () => {
     return () => {unsub()};}
  },[user, loading])
 
+
  useEffect(()=>{
   let unsub;
 
   const fetchCards: any = async () => {
 
-    const snapshot = await getDocs(collection(db, 'users'));
+    const snapshot = await getDocs(collection(db, 'user'));
     const initialProfiles = snapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data(),
   }));
   setProfiles(initialProfiles);
   
-  unsub = onSnapshot(collection(db, 'users'), (snapshot: any) => {
+  unsub = onSnapshot(collection(db, 'user'), (snapshot: any) => {
     setProfiles(snapshot.docs.map( (doc: any) => ({
       id: doc.id,
       ...doc.data(),

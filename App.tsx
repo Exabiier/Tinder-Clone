@@ -9,6 +9,8 @@ import { AuthProvider } from './Hooks/useAuth';
 // TODO See if you only can only do one https://github.com/expo/expo/issues/12808
 // TODO We need to to make major type definitions on the home screen on swiper and data from google firebase
 // TODO Need to to make an interface for the the style sheet
+// TODO need to add find bug for why im not getting the name
+// TODO make types for for the doc from google docs and We got to see how we can do an if statement the card run out for our profiles
 
  
 

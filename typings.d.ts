@@ -26,6 +26,17 @@ type DummyData = {
     id: number,
 }
 
+/// type for Firebase Database ///
+type FireBaseData = {
+    age: string,
+    displayName: string,
+    gender: string,
+    id: string,
+    job: string,
+    photoURL: string,
+    timestamp: {seconds: number, nonoseconds: number}
+}
+
 /// user data from the ModalScreen.tsx ///
 
  type UserData = {

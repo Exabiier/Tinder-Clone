@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import {AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import useAuth from '../Hooks/useAuth'
 import Swiper from 'react-native-deck-swiper'
-import { collection, doc, getDocs, onSnapshot } from 'firebase/firestore'
+import { collection, doc, getDocs, onSnapshot, query, setDoc, where } from 'firebase/firestore'
 import { db } from '../firebase'
 
 
@@ -36,14 +36,12 @@ const Dummy_Data =[
 }
 ]
 
-
 const HomeScreen = () => {
   const { logOut, user, loading} = useAuth();
   const navigation = useNavigation<ChatScreenNavigationProp | ModalScreenNavigationProp>();
-  const swipeRef = useRef<Swiper<DummyData>>(null);
-  const [ profiles, setProfiles ] = useState<any>([]);
+  const swipeRef = useRef<Swiper<FireBaseData>>(null);
+  const [ profiles, setProfiles ] = useState<FireBaseData[]>([]);
 
-  console.log(user)
  useEffect(()=>{
     if(user.uid){
     const unsub = onSnapshot(doc(db, 'user', user.uid), snapshot => {
@@ -55,32 +53,55 @@ const HomeScreen = () => {
     return () => {unsub()};}
  },[user, loading])
 
-
  useEffect(()=>{
   let unsub;
+  const fetchCards: () => void = async () => {
+    ///  Get the IDs of the users that the current user has swiped left on///
 
-  const fetchCards: any = async () => {
+    const passesSnapshot = await getDocs(collection(db, "user", user.uid, "passes"));
+    const passes = passesSnapshot.docs.map(doc => doc.id); 
 
-    const snapshot = await getDocs(collection(db, 'user'));
-    const initialProfiles = snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-  setProfiles(initialProfiles);
-  
-  unsub = onSnapshot(collection(db, 'user'), (snapshot: any) => {
-    setProfiles(snapshot.docs.map( (doc: any) => ({
-      id: doc.id,
-      ...doc.data(),
-    })));
-  })}
+    console.log(passes)
+    const passedUserIds = passes.length > 0 ? passes : ["Firebase won't allow empty arrays"]
 
+    /// Get IDs of the users that the users that the current user had swiped right on. ///
+
+    const swipesSnapshot = await getDocs(collection(db, "user", user.uid, "swipes"));
+    const swipes = swipesSnapshot.docs.map(doc => doc.id);
+
+    const swipedUserIds = swipes.length > 0 ?  swipes : ["Firebase won't allow empty arrays"]
+
+
+    // Use the "in" operator to include only users whose IDs are not in the "passes" array.//
+    unsub = onSnapshot(query(collection(db, 'user'), where("id", "not-in", [...passedUserIds, ...swipedUserIds])), (snapshot: any) => {
+      setProfiles(snapshot.docs.filter((doc: any) => doc.id !== user.uid).map((doc: any) => ({
+        id: doc.id,
+        ...doc.data(),
+      })));
+    })}
   fetchCards();
   return unsub;
+ },[user, db])
 
- },[])
+ const swipeLeft = async (cardIndex: number) =>{
+    console.log(cardIndex)
+    if(!profiles[cardIndex]){
+      return;
+    }
+    const userSwiped = profiles[cardIndex]
+    console.log(`You swiped PASS on ${userSwiped.displayName} `);
+    setDoc(doc(db, 'user', user.uid, 'passes', userSwiped.id), userSwiped)
+ }
 
- console.log(profiles)
+ const swipeRight = async (cardIndex: number) =>{
+  console.log(cardIndex)
+  if(!profiles[cardIndex]){
+    return;
+  }
+  const userSwiped = profiles[cardIndex]
+  console.log(`You swiped on ${userSwiped.displayName} ${userSwiped.job} `);
+  setDoc(doc(db, 'user', user.uid, 'swipes', userSwiped.id), userSwiped)
+ }
 
   return (
     <SafeAreaView className="flex-1">
@@ -103,7 +124,7 @@ const HomeScreen = () => {
       {/* End of Header */}
 
       <View className="flex-1  -mt-6">
-        <Swiper<DummyData>
+        <Swiper<FireBaseData>
           ref={swipeRef}
           cards={profiles}
           stackSize={5}
@@ -111,10 +132,14 @@ const HomeScreen = () => {
           animateCardOpacity
           verticalSwipe={false}
           onSwipedLeft={
-            () => console.log("Swipe PASS")
+            (cardIndex) => {console.log("Swipe PASS");
+            swipeLeft(cardIndex)}
           }
           onSwipedRight={
-            () => console.log("Swiped Match")
+            (cardIndex) => {
+            console.log("Swiped Match")
+            swipeRight(cardIndex)
+          }
           }
           backgroundColor={"#4FD0E9"}
           overlayLabels={{
@@ -137,7 +162,7 @@ const HomeScreen = () => {
             },
           }}
           containerStyle={{ backgroundColor: "transparent"}}
-          renderCard={(card) => card ?(
+          renderCard={(card) => card ? (
             <View key={card.id} className="relative bg-white-500 h-3/4 rounded-xl">
 
               <Image className="w-full h-full rounded-xl" source={{ uri: card.photoURL}}/>
@@ -145,7 +170,7 @@ const HomeScreen = () => {
               <View className="flex-row absolute bottom-0  bg-white w-full justify-between items-between h-20 px-6 py-2 rounded-b-xl" style={styles.cardShadow}> 
                 <View>
                   <Text className="font-bold text-xl">
-                    {card.firstName} {card.lastName}
+                    {card.displayName}
                   </Text>
                   <Text>{card.job}</Text>
                 </View>
@@ -161,11 +186,8 @@ const HomeScreen = () => {
               <View className='object-cover w-40 h-40'>
                 <Image
                   className="h-full w-full"
-                
                   source={{ uri: "https://links.papareact.com/6gb"}} />  
                 </View>  
-               
-              
             </View>
           )}
         />     

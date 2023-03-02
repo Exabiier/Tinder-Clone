@@ -1,12 +1,14 @@
-import { View, Text } from 'react-native'
+import { View, Text, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import useAuth from '../Hooks/useAuth';
+import ChatRow from './ChatRow';
+
 
 
 const ChatList = () => {
-    const [matches, setMatches] = useState([]);
+    const [matches, setMatches] = useState<any>([]);
     const { user } = useAuth();
 
     useEffect(()=> {
@@ -21,9 +23,16 @@ const ChatList = () => {
     console.log(matches)
 
   return (
-    <View className="">
-      <Text>ChatList..</Text>
-    </View>
+    matches.length > 0 ? (
+      <FlatList<any> className='h-full'
+      data={matches}
+      keyExtractor={item => item.id}
+      renderItem={({item}) => <ChatRow matchDetails={item} />}  />
+      ) : (
+        <View className="p-5">
+          <Text className="text-center text-lg"> No matches at the moment </Text>
+        </View>
+      )
   )
 }
 

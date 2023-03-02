@@ -1,8 +1,12 @@
+/// Types for React Navigation ///
+
 type RootStackParamList = {
     Home: undefined,
     Chat: undefined,
     Login: undifined,
     ModalScreen: undifined,
+    Match: { loggedinProfile: FireBaseData, userSwiped: FireBaseData },
+
 }
 
 type ChatScreenNavigationProp = NavigationProp<RootStackParamList, "Chat">
@@ -10,6 +14,10 @@ type ChatScreenNavigationProp = NavigationProp<RootStackParamList, "Chat">
 type HomeScreenNavigationProp = NavigationProp<RootStackParamList, "Home">
 
 type ModalScreenNavigationProp = NavigationProp<RootStackParamList, "ModalScreen">
+
+type MatchScreenNavigationProp = NavigationProp<RootStackParamList, "Match">;
+
+type MatchScreenRouteProp = RouteProp<RootStackParamList, "Match">;
 
 // types for Provider:
 type AuthProviderProp = {

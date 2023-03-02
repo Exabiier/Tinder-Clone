@@ -12,6 +12,7 @@ import { AuthProvider } from './Hooks/useAuth';
 // TODO need to add find bug for why im not getting the name
 // TODO make types for for the doc from google docs and We got to see how we can do an if statement the card run out for our profiles
 // TODO Nedd to make type for the data being put into the firebase database on the homeScreen
+// TODO need to make types for the getMatchedUserInfo.ts
 
  
 

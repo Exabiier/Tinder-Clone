@@ -5,36 +5,11 @@ import { useNavigation } from '@react-navigation/native'
 import {AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import useAuth from '../Hooks/useAuth'
 import Swiper from 'react-native-deck-swiper'
-import { collection, doc, getDocs, onSnapshot, query, setDoc, where } from 'firebase/firestore'
+import { DocumentSnapshot, collection, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
 import { db } from '../firebase'
+import generateId from '../Libary/genertateID'
 
 
-const Dummy_Data =[
-{
-  firstName: "Sonny",
-  lastName: "Sangha",
-  job: "software Developer",
-  photoURL: "https://images.unsplash.com/photo-1603134281085-cf0c4b61a65d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1528&q=80",
-  age: 27,
-  id: 123
-},
-{
-  firstName: "Elon",
-  lastName: "Musk",
-  job: "CEO",
-  photoURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Elon_Musk_Brazil_2022.png/1200px-Elon_Musk_Brazil_2022.png",
-  age: 40,
-  id: 456
-},
-{
-  firstName: "Sonny",
-  lastName: "Sangha",
-  job: "software Developer",
-  photoURL: "https://images.unsplash.com/photo-1603134281085-cf0c4b61a65d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1528&q=80",
-  age: 27,
-  id:789
-}
-]
 
 const HomeScreen = () => {
   const { logOut, user, loading} = useAuth();
@@ -64,13 +39,12 @@ const HomeScreen = () => {
     console.log(passes)
     const passedUserIds = passes.length > 0 ? passes : ["Firebase won't allow empty arrays"]
 
-    /// Get IDs of the users that the users that the current user had swiped right on. ///
+    /// Get IDs of the users that the current user had swiped right on. ///
 
     const swipesSnapshot = await getDocs(collection(db, "user", user.uid, "swipes"));
     const swipes = swipesSnapshot.docs.map(doc => doc.id);
 
     const swipedUserIds = swipes.length > 0 ?  swipes : ["Firebase won't allow empty arrays"]
-
 
     // Use the "in" operator to include only users whose IDs are not in the "passes" array.//
     unsub = onSnapshot(query(collection(db, 'user'), where("id", "not-in", [...passedUserIds, ...swipedUserIds])), (snapshot: any) => {
@@ -93,12 +67,46 @@ const HomeScreen = () => {
     setDoc(doc(db, 'user', user.uid, 'passes', userSwiped.id), userSwiped)
  }
 
+
  const swipeRight = async (cardIndex: number) =>{
   console.log(cardIndex)
   if(!profiles[cardIndex]){
     return;
   }
   const userSwiped = profiles[cardIndex]
+  const loggedIn: any = await (await getDoc(doc(db, 'user', user.uid))).data();
+  const loggedInProfile = loggedIn as FireBaseData;
+
+  // check if the user swiped on you...
+  getDoc(doc(db, 'user', userSwiped.id, "swipes", user.uid)).then(
+    (DocumentSnapshot) => {
+
+    if(DocumentSnapshot.exists()){
+      // user has matched with you before they matched with you
+      console.log( "you Matched")
+
+      setDoc(doc(db, 'user', user.uid, "swipes", userSwiped.id), userSwiped)
+
+      // Create a match:
+      setDoc(doc(db, 'matches', generateId(user.uid, userSwiped.id)), { users: {
+        [user.uid]: loggedInProfile,
+        [userSwiped.id]: userSwiped
+      },
+      userMatched: [user.uid, userSwiped.id],
+      timestamp: serverTimestamp()
+      });
+      
+      navigation.navigate('Match', {
+        loggedInProfile,
+        userSwiped,
+        })
+    } else {
+        // user has swiped as first interaction between the 2 or didnt get swiped on...
+        console.log("you swiped on someone");
+        setDoc(doc(db, 'user', user.uid, "swipes", userSwiped.id), userSwiped)
+    }
+  })
+
   console.log(`You swiped on ${userSwiped.displayName} ${userSwiped.job} `);
   setDoc(doc(db, 'user', user.uid, 'swipes', userSwiped.id), userSwiped)
  }

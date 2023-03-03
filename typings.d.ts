@@ -1,11 +1,13 @@
-/// Types for React Navigation ///
 
+
+/// Types for React Navigation ///
 type RootStackParamList = {
     Home: undefined,
     Chat: undefined,
     Login: undifined,
     ModalScreen: undifined,
     Match: { loggedinProfile: FireBaseData, userSwiped: FireBaseData },
+    Message: { matcheDetial: any}
 
 }
 
@@ -18,6 +20,10 @@ type ModalScreenNavigationProp = NavigationProp<RootStackParamList, "ModalScreen
 type MatchScreenNavigationProp = NavigationProp<RootStackParamList, "Match">;
 
 type MatchScreenRouteProp = RouteProp<RootStackParamList, "Match">;
+
+type MessageScreenNavigationProp = NavigationProp<RootStackParamList, "Message">
+
+type MessageScreenRouteProp = RouteProp<RootStackParamList, "Message">
 
 // types for Provider:
 type AuthProviderProp = {
@@ -97,6 +103,8 @@ interface FirebaseConfigure {
     appId: string,
 }
 
+/// types ///
+
 type Memoed = {
   user: firebase.default.User | null;
   loading: boolean;
@@ -105,6 +113,26 @@ type Memoed = {
   signInWithGoogle: () => Promise<void>;
 }
 
+type MessageFBData = {
+    timestamp: FieldValue,
+    userId: string,
+    displayName: string,
+    photoURL: string,
+    message: string,
+    id: string,
+}
+
+// type Message = {
+
+// }
+
+type InputMessageFBData = {
+    timestamp: FieldValue,
+    userId: string,
+    displayName: string,
+    photoURL: string,
+    message: string,
+}
 /// Home Screen interfaces ///
   
 

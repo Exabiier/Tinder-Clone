@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 
 type Props ={
-    message: any
+    message: MessageFBData
 }
 
 const SenderMessage = ({message}: Props) => {

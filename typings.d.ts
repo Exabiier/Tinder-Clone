@@ -1,5 +1,4 @@
 
-
 /// Types for React Navigation ///
 type RootStackParamList = {
     Home: undefined,
@@ -7,7 +6,7 @@ type RootStackParamList = {
     Login: undifined,
     ModalScreen: undifined,
     Match: { loggedinProfile: FireBaseData, userSwiped: FireBaseData },
-    Message: { matcheDetial: any}
+    Message: { matcheDetial: FireBaseMatchDataRetrieve}
 
 }
 
@@ -113,6 +112,9 @@ type Memoed = {
   signInWithGoogle: () => Promise<void>;
 }
 
+/////////////////////////////////////////////////////////////////
+///  2 types required due to FlatList not liking types with ? ///
+
 type MessageFBData = {
     timestamp: FieldValue,
     userId: string,
@@ -122,10 +124,6 @@ type MessageFBData = {
     id: string,
 }
 
-// type Message = {
-
-// }
-
 type InputMessageFBData = {
     timestamp: FieldValue,
     userId: string,
@@ -133,7 +131,21 @@ type InputMessageFBData = {
     photoURL: string,
     message: string,
 }
-/// Home Screen interfaces ///
+
+//////////////////////////////////
+
+type FireBaseMatchData = {
+    users: Record<string, FireBaseData>,
+    userMatched: string[],
+    timestamp?: FieldValue
+}
+
+type FireBaseMatchDataRetrieve = {
+    id: string,
+    users: Record<string, FireBaseData>,
+    userMatched: string[],
+    timestamp?: {seconds: number, nonoseconds: number}  
+}
   
 
   

@@ -3,19 +3,28 @@ import { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import useAuth from '../Hooks/useAuth'
 import getMatchUserInfo from '../Libary/getMatchedUserInfo'
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { db } from '../firebase'
 
 type Props = {
-    matchDetails: any
+    matchDetails: FireBaseMatchDataRetrieve
 }
 
 const ChatRow = ({matchDetails}: Props) => {
     const navigation = useNavigation<MessageScreenNavigationProp>();
-    const [ matchedUserInfo, setMatchedUserInfo ] = useState<any>(null)
+    const [ matchedUserInfo, setMatchedUserInfo ] = useState<FireBaseData | null>(null);
+    const [ lastMessage, setLastMessage ] = useState<string>("")
     const { user } = useAuth();
     
 useEffect(()=>{
     setMatchedUserInfo(getMatchUserInfo(matchDetails.users, user.uid))
 }, [matchDetails, user])
+
+useEffect(()=>{
+    onSnapshot(query(collection(db, 'matches', matchDetails.id, "messages"),
+    orderBy("timestamp", "desc")), (snapshot) => { setLastMessage(snapshot.docs[0]?.data()?.message) 
+    })
+}, [matchDetails, db])
 
 
 console.log(matchedUserInfo);
@@ -32,7 +41,7 @@ console.log(matchedUserInfo);
 
         <View>
             <Text className="text-lg font-semibold">{matchedUserInfo?.displayName}</Text>
-            <Text>Say Hi!</Text>
+            <Text>{lastMessage === "" ? "Say Hi!" : lastMessage}</Text>
         </View>
     </TouchableOpacity>
   )

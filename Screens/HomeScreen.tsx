@@ -27,6 +27,7 @@ const HomeScreen = () => {
     });
     return () => {unsub()};}
  },[user, loading])
+ 
 
  useEffect(()=>{
   let unsub;
@@ -56,6 +57,7 @@ const HomeScreen = () => {
   fetchCards();
   return unsub;
  },[user, db])
+
 
  const swipeLeft = async (cardIndex: number) =>{
     console.log(cardIndex)
@@ -87,19 +89,25 @@ const HomeScreen = () => {
 
       setDoc(doc(db, 'user', user.uid, "swipes", userSwiped.id), userSwiped)
 
+      /// object created for the Match DataBase ///
+
+      const matchData: FireBaseMatchData = {
+        users: {
+          [user.uid]: loggedInProfile,
+          [userSwiped.id]: userSwiped
+        },
+        userMatched: [user.uid, userSwiped.id],
+        timestamp: serverTimestamp()
+      }
+
       // Create a match:
-      setDoc(doc(db, 'matches', generateId(user.uid, userSwiped.id)), { users: {
-        [user.uid]: loggedInProfile,
-        [userSwiped.id]: userSwiped
-      },
-      userMatched: [user.uid, userSwiped.id],
-      timestamp: serverTimestamp()
-      });
+      setDoc(doc(db, 'matches', generateId(user.uid, userSwiped.id)), matchData );
       
       navigation.navigate('Match', {
         loggedInProfile,
         userSwiped,
         })
+
     } else {
         // user has swiped as first interaction between the 2 or didnt get swiped on...
         console.log("you swiped on someone");

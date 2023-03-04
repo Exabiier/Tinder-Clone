@@ -8,23 +8,27 @@ import ChatRow from './ChatRow';
 
 
 const ChatList = () => {
-    const [matches, setMatches] = useState<any>([]);
+    const [matches, setMatches] = useState<FireBaseMatchDataRetrieve[]>([]);
     const { user } = useAuth();
 
     useEffect(()=> {
         onSnapshot(
             query(
-                collection(db, "matches"), where('userMatched', 'array-contains', user.uid)), (snapshot: any) => setMatches(snapshot.docs.map((doc: any) => ({
+                collection(db, "matches"), where('userMatched', 'array-contains', user.uid)), (snapshot) => {const snapShotData: FireBaseMatchDataRetrieve[]  = snapshot.docs.map((doc ) => ({
                     id: doc.id,
-                    ...doc.data()
-                }))))
+                    timestamp: doc.data().timestamp,
+                    userMatched: doc.data().userMatched,
+                    users: doc.data().users
+                }))
+                setMatches(snapShotData)
+              })
     },[user])
 
     console.log(matches)
 
   return (
     matches.length > 0 ? (
-      <FlatList<any> className='h-full'
+      <FlatList<FireBaseMatchDataRetrieve> className='h-full'
       data={matches}
       keyExtractor={item => item.id}
       renderItem={({item}) => <ChatRow matchDetails={item} />}  />

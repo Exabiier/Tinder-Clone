@@ -47,7 +47,7 @@ type FireBaseData = {
     id: string,
     job: string,
     photoURL: string,
-    timestamp: {seconds: number, nonoseconds: number}
+    timestamp?: {seconds: number, nonoseconds: number}
 }
 
 /// user data from the ModalScreen.tsx ///
@@ -116,7 +116,7 @@ type Memoed = {
 ///  2 types required due to FlatList not liking types with ? ///
 
 type MessageFBData = {
-    timestamp: FieldValue,
+    timestamp?: FieldValue,
     userId: string,
     displayName: string,
     photoURL: string,

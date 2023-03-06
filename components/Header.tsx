@@ -23,8 +23,8 @@ const Header = ({title, callEnabled}: Props) => {
       </View>
 
       {callEnabled && (
-        <TouchableOpacity className="rounded-full mr-4 p-3 bg-red-200">
-          <Foundation className="" name="telephone" size={20} />
+        <TouchableOpacity className="rounded-full mr-4 p-3 bg-green-300">
+          <Foundation className="" name="telephone" size={20}  />
 
         </TouchableOpacity>
       )}

@@ -1,8 +1,8 @@
-const getMatchedUserInfo = (users: any, userLoggedIn: any) => {
+const getMatchedUserInfo = (users: Record<string, FireBaseData>, userLoggedIn: string) => {
     const newUsers = { ...users };
     delete newUsers[userLoggedIn]
     const [id, user] = Object.entries(newUsers).flat();
-    // @ts-ignore
+    // @ts-ignore: need to find resolution for ts spread oprator typing
     return {id, ...user};
 }
 

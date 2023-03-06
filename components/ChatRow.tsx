@@ -27,7 +27,7 @@ useEffect(()=>{
 }, [matchDetails, db])
 
 
-console.log(matchedUserInfo);
+console.log(lastMessage);
 
   return (
     <TouchableOpacity className="flex-row items-center py-3 px-5 bg-white mx-3 my-1 rounded-lg" 
@@ -41,7 +41,7 @@ console.log(matchedUserInfo);
 
         <View>
             <Text className="text-lg font-semibold">{matchedUserInfo?.displayName}</Text>
-            <Text>{lastMessage === "" ? "Say Hi!" : lastMessage}</Text>
+            <Text>{lastMessage === undefined ? "Say Hi!" : lastMessage}</Text>
         </View>
     </TouchableOpacity>
   )
